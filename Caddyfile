@@ -3,13 +3,17 @@
     https_port 443
 }
 
-matrix.resistance.chat {
-    # 1. Reverse proxy to Synapse (default port is 8008)
-    reverse_proxy localhost:8008
+{
+    # Global option to prevent Caddy from trying to redirect HTTP to HTTPS
+    auto_https off
+}
 
-    # 2. Add strict transport security (optional but recommended for Matrix)
-    header {
-        Strict-Transport-Security "max-age=31536000;"
+http://matrix.resistance.chat {
+    reverse_proxy synapse:8008 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
     }
 }
 
@@ -19,3 +23,6 @@ matrix.resistance.chat:8448 {
     reverse_proxy localhost:8008
 }
 
+:80 {
+    reverse_proxy synapse:8008
+}
