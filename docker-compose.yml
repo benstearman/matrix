@@ -1,0 +1,41 @@
+services:
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "8080:80"   # Maps Host 8080 -> Container 80
+      - "8443:443"  # Maps Host 8443 -> Container 443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - synapse
+
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: synapse
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    environment:
+      - SYNAPSE_SERVER_NAME=resistance.chat
+      - SYNAPSE_REPORT_STATS=no
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14-alpine
+    container_name: synapse-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=synapse
+      - POSTGRES_PASSWORD=e3pxSxAiA1ZWTgR!
+      - POSTGRES_DB=synapse
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+
+volumes:
+  caddy_data:
+  caddy_config:

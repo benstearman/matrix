@@ -1,0 +1,21 @@
+{
+    # Use internal HTTPS port to match the container mapping
+    https_port 443
+}
+
+matrix.resistance.chat {
+    # 1. Reverse proxy to Synapse (default port is 8008)
+    reverse_proxy localhost:8008
+
+    # 2. Add strict transport security (optional but recommended for Matrix)
+    header {
+        Strict-Transport-Security "max-age=31536000;"
+    }
+}
+
+# Optional: If you want to support Federation on port 8448 directly
+# (Though most modern setups use .well-known delegation instead)
+matrix.resistance.chat:8448 {
+    reverse_proxy localhost:8008
+}
+

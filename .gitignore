@@ -1,0 +1,42 @@
+# --- Matrix / Synapse Generated Data ---
+# CRITICAL: Never commit your private keys or signing keys
+*.signing.key
+*.pem
+*.key
+
+# Synapse Data Directory (Media store, uploads, generated configs)
+# This folder usually contains your 'homeserver.yaml' and keys.
+data/
+media_store/
+uploads/
+
+# --- Database & Storage ---
+# Postgres or SQLite data volumes
+db_data/
+postgres_data/
+*.db
+*.sqlite
+
+# --- Docker & Environment ---
+# Environment variables often contain secrets (DB passwords, etc.)
+.env
+.env.local
+.env.*
+
+# Docker logs and temp files
+docker-compose.override.yml
+*.log
+
+# --- Certificates (Certbot/Let's Encrypt) ---
+# Never commit SSL certificates
+certbot/
+certs/
+conf/live/
+conf/archive/
+
+# --- OS & Editor Junk ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
