@@ -1,14 +1,10 @@
 {
-    # Use internal HTTPS port to match the container mapping
-    https_port 443
-}
-
-{
-    # Global option to prevent Caddy from trying to redirect HTTP to HTTPS
+    # Prevents Caddy from trying to issue its own SSL certs or redirect to HTTPS
     auto_https off
 }
 
 http://matrix.resistance.chat {
+    # Points to the Synapse container on its internal port
     reverse_proxy synapse:8008 {
         header_up Host {host}
         header_up X-Real-IP {remote_host}
@@ -17,12 +13,7 @@ http://matrix.resistance.chat {
     }
 }
 
-# Optional: If you want to support Federation on port 8448 directly
-# (Though most modern setups use .well-known delegation instead)
-matrix.resistance.chat:8448 {
-    reverse_proxy localhost:8008
-}
-
+# Simple catch-all for local testing/tunneling
 :80 {
     reverse_proxy synapse:8008
 }
